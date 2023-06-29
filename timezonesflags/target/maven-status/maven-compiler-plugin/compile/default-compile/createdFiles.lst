@@ -1,0 +1,10 @@
+project\entities\UTCTimezone.class
+project\App.class
+project\entities\PlusTimezone.class
+project\entities\PlusTimezone$1.class
+project\entities\UTCTimezone$1.class
+project\handlers\SliderInteractionHandler.class
+module-info.class
+project\conversorFrontController.class
+project\entities\MinusTimezone$1.class
+project\entities\MinusTimezone.class
