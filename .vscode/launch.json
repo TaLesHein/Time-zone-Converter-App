@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "apagueMe",
+            "request": "launch",
+            "mainClass": "project/project.entities.apagueMe",
+            "projectName": "timezonesflags"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -17,7 +24,6 @@
             "mainClass": "project/project.App",
             "projectName": "timezonesflags",
             "java.home": "C:/Program Files/Maven/apache-maven-3.8.8-bin/apache-maven-3.8.8"
-    }
-         
+        }
     ]
 }

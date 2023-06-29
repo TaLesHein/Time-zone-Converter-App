@@ -28,6 +28,7 @@ public class MinusTimezone {
     private int valueScroll;
     private ZoneId zoneId;
     private ZonedDateTime dateLocal;
+    private Country countrys[] = new Country[11];
 
     public MinusTimezone(Label date, Label hours, Label timezone, Label zone,
             Slider scroll, ImageView flag) {
@@ -37,12 +38,50 @@ public class MinusTimezone {
         this.lblMinusTimezone = timezone;
         this.lblMinusZone = zone;
         this.scrollMinus = scroll;
+        this.minusFlag = flag;
 
         zoneId = ZoneId.of("-03:00");
         dateLocal = ZonedDateTime.parse("2023-01-01T09:00:00" + zoneId);
 
+        arrayConstructor();
         scrollConstructor();
 
+    }
+
+    private void arrayConstructor(){
+
+        // -01:00
+        countrys[0] = new Country("Apia/Samoa", "/project/images/Apia, Samoa.png");
+
+        // -02:00
+        countrys[1] = new Country("Havai/Estados Unidos", "/project/images/Havai, Estados Unidos.png");
+
+        // -03:00
+        countrys[2] = new Country("Alasca/Estados Unidos", "/project/images/Alasca, Estados Unidos.png");
+
+        // -04:00
+        countrys[3] = new Country("California/Estados Unidos", "/project/images/California, Estados Unidos.png");
+
+        // -05:00
+        countrys[4] = new Country("Arizona/Estados Unidos", "/project/images/Arizona, Estados Unidos.png");
+
+        // -06:00
+        countrys[5] = new Country("Cidade do México/México", "/project/images/Cidade do Mexico, Mexico.png");
+
+        // -07:00
+        countrys[6] = new Country("Nova York/Estados Unidos", "/project/images/Nova York, Estados Unidos.png");
+
+        // -08:00
+        countrys[7] = new Country("Santiago/Chile", "/project/images/Santiago, Chile.png");
+
+        // -09:00
+        countrys[8] = new Country("São Paulo/Brasil", "/project/images/Sao Paulo, Brasil.png");
+
+        // -10:00
+        countrys[9] = new Country("Pernambuco/Brasil", "/project/images/Pernambuco, Brasil.png");
+
+        // -11:00
+        countrys[10] = new Country("Açores/Portugal", "/project/images/Acores, Portugal.png");
     }
 
     private void scrollConstructor() {
@@ -61,6 +100,7 @@ public class MinusTimezone {
 
                 lblMinusTimezone.setText(zoneId.toString());
                 convertTimezoneHours();
+                alterFlag();
             }
 
         });
@@ -78,6 +118,15 @@ public class MinusTimezone {
 
         setZonedDateTime(convertZonedDateTime);
 
+    }
+
+    private void alterFlag(){
+
+        int valueZoneId = Integer.parseInt(zoneId.toString().substring(1,3));
+        
+        minusFlag.setImage(countrys[valueZoneId-1].getImgFlag());
+
+        lblMinusZone.setText(countrys[valueZoneId-1].getNameCountry());
     }
 
     public void setHourText(String newHour) {
