@@ -13,9 +13,10 @@ public class PaneInfo {
     private ImageView countryFlag;
 
     private Scroll slider;
+    private ImagesFlags imgFlag;
 
     public PaneInfo(Label lblDate, Label lblHours, Label lblTimezone, Label lblZone, ImageView countryFlag,
-            Scroll slider) {
+            Scroll slider, ImagesFlags flag) {
 
         this.lblDate = lblDate;
         this.lblHours = lblHours;
@@ -23,15 +24,19 @@ public class PaneInfo {
         this.lblZone = lblZone;
         this.countryFlag = countryFlag;
         this.slider = slider;
+        this.imgFlag = flag;
 
     }
 
-    public PaneInfo(Label lblHours, ImageView countryFlag, Scroll slider){
+    public PaneInfo(Label lblHours, ImageView countryFlag, Scroll slider, ImagesFlags flag) {
         this.lblHours = lblHours;
         this.countryFlag = countryFlag;
         this.slider = slider;
+        this.imgFlag = flag;
 
     }
+
+    
     public Label getLblDate() {
         return lblDate;
     }
@@ -56,6 +61,8 @@ public class PaneInfo {
         return slider;
     }
 
-    
+    public ImagesFlags getImgFlag() {
+        return imgFlag;
+    }
 
 }

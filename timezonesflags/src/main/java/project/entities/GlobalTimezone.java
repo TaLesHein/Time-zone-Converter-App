@@ -9,50 +9,51 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import project.SceneControl;
 import project.utils.SliderInteractionHandler;
 
-public class UTCTimezone {
+public class GlobalTimezone {
 
     @FXML
-    private Label lblUTCHour;
+    private Label lblHour;
 
     @FXML
-    private Slider scrollUTC;
+    private Scroll scroll;
 
     @FXML
-    private ImageView utcFlag;
+    private ImageView countryFlag;
 
-    private int valueScroll;
     private OffsetDateTime dateGlobal = OffsetDateTime.parse("2023-01-01T12:00:00Z");
 
-    public UTCTimezone(Label lblDate, Slider scroll, ImageView flag) {
+    public GlobalTimezone(PaneInfo paneInfo) {
 
-        this.lblUTCHour = lblDate;
-        this.scrollUTC = scroll;
-        this.utcFlag = flag;
+        this.lblHour = paneInfo.getLblHours();
+        this.scroll = paneInfo.getSlider();
+        this.countryFlag = paneInfo.getCountryFlag();
 
+         SliderInteractionHandler.sliderEvent(scroll.getSlider(), lblHour);
+        scrollEventObservable();
+
+    }
+
+    private void scrollEventObservable() {
         DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        scrollUTC.valueProperty().addListener(new ChangeListener<Number>() {
+        scroll.getSlider().valueProperty().addListener(new ChangeListener<Number>() {
 
             @Override
             public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 
-                valueScroll = (int) scrollUTC.getValue();
-                String valueFormatString = String.format("%02d", valueScroll);
+                String valueFormatString = String.format("%02d", scroll.getValueScroll());
 
                 dateGlobal = OffsetDateTime.parse("2023-01-01T" + valueFormatString + ":00:00Z");
 
-                lblUTCHour.setText(dFormatter.format(dateGlobal));
+                lblHour.setText(dFormatter.format(dateGlobal));
                 convertTimezoneHours();
 
             }
 
         });
-
-        SliderInteractionHandler.sliderEvent(scrollUTC, lblUTCHour);
 
     }
 
@@ -66,13 +67,13 @@ public class UTCTimezone {
 
         ZonedDateTime convertMinusDateTime = dateGlobal.atZoneSameInstant(minusZoneId);
         ZonedDateTime convertPlusDateTime = dateGlobal.atZoneSameInstant(plusZoneId);
-        
+
         minusTimezone.setZonedDateTime(convertMinusDateTime);
         plusTimezone.setZonedDateTime(convertPlusDateTime);
 
     }
 
-    public OffsetDateTime getOffsetDateTime(){
+    public OffsetDateTime getOffsetDateTime() {
         return dateGlobal;
     }
 
