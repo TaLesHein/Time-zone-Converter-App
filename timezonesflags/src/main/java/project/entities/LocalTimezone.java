@@ -11,44 +11,54 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
-import project.conversorFrontController;
+import project.SceneControl;
 import project.utils.SliderInteractionHandler;
 
-public class MinusTimezone {
+public class LocalTimezone {
 
     @FXML
-    private Label lblMinusDate, lblMinusHours, lblMinusTimezone, lblMinusZone;
+    private Label lblDate, lblHours, lblTimezone, lblZone;
 
     @FXML
-    private Slider scrollMinus;
+    private ImageView countryFlag;
 
-    @FXML
-    private ImageView minusFlag;
-
-    private int valueScroll;
-    private ZoneId zoneId;
-    private ZonedDateTime dateLocal;
+    private Scroll scroll;
     private Country countrys[] = new Country[11];
 
-    public MinusTimezone(Label date, Label hours, Label timezone, Label zone,
-            Slider scroll, ImageView flag) {
+    private ZoneId zoneId;
+    private ZonedDateTime dateLocal;
 
-        this.lblMinusDate = date;
-        this.lblMinusHours = hours;
-        this.lblMinusTimezone = timezone;
-        this.lblMinusZone = zone;
-        this.scrollMinus = scroll;
-        this.minusFlag = flag;
+    private String stringTimezoneFormat;
 
-        zoneId = ZoneId.of("-03:00");
+    public LocalTimezone(PaneInfo paneInfo) {
+
+        this.lblDate = paneInfo.getLblDate();
+        this.lblHours = paneInfo.getLblHours();
+        this.lblTimezone = paneInfo.getLblTimezone();
+        this.lblZone = paneInfo.getLblZone();
+
+        this.countryFlag = paneInfo.getCountryFlag();
+
+        this.scroll = paneInfo.getSlider();
+
+        if (scroll.getSlider().getValue() > 0) {
+
+            stringTimezoneFormat = "+%02d";
+        }
+        else{
+            stringTimezoneFormat = "%03d";
+        }
+
+        String zoneIdDefine = String.format(stringTimezoneFormat, (int) scroll.getSlider().getValue());
+        zoneId = ZoneId.of(zoneIdDefine);
         dateLocal = ZonedDateTime.parse("2023-01-01T09:00:00" + zoneId);
 
         arrayConstructor();
-        scrollConstructor();
+        scrollEventObservable();
 
     }
 
-    private void arrayConstructor(){
+    private void arrayConstructor() {
 
         // -01:00
         countrys[0] = new Country("Apia/Samoa", "/project/images/Apia, Samoa.png");
@@ -84,33 +94,28 @@ public class MinusTimezone {
         countrys[10] = new Country("Açores/Portugal", "/project/images/Acores, Portugal.png");
     }
 
-    private void scrollConstructor() {
+    private void scrollEventObservable() {
 
-        scrollMinus.setMin(-11);
-        scrollMinus.setMax(-01);
-        scrollMinus.setValue(-3);
-
-        scrollMinus.valueProperty().addListener(new ChangeListener<Number>() {
+        scroll.getSlider().valueProperty().addListener(new ChangeListener<Number>() {
 
             @Override
             public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 
-                valueScroll = (int) scrollMinus.getValue();
-                zoneId = ZoneId.of(String.format("%03d:00", valueScroll));
+                zoneId = ZoneId.of(String.format(stringTimezoneFormat, scroll.getValueScroll()));
 
-                lblMinusTimezone.setText(zoneId.toString());
+                lblTimezone.setText(zoneId.toString());
                 convertTimezoneHours();
                 alterFlag();
             }
 
         });
 
-        SliderInteractionHandler.sliderEvent(scrollMinus, lblMinusTimezone);
+        SliderInteractionHandler.sliderEvent(scroll.getSlider(), lblTimezone);
     }
 
     private void convertTimezoneHours() {
 
-        UTCTimezone utcTimezone = conversorFrontController.getUTCTimezone();
+        UTCTimezone utcTimezone = SceneControl.getUTCTimezone();
 
         OffsetDateTime dateGlobal = utcTimezone.getOffsetDateTime();
 
@@ -120,21 +125,21 @@ public class MinusTimezone {
 
     }
 
-    private void alterFlag(){
+    private void alterFlag() {
 
-        int valueZoneId = Integer.parseInt(zoneId.toString().substring(1,3));
-        
-        minusFlag.setImage(countrys[valueZoneId-1].getImgFlag());
+        int valueZoneId = Integer.parseInt(zoneId.toString().substring(1, 3));
 
-        lblMinusZone.setText(countrys[valueZoneId-1].getNameCountry());
+        countryFlag.setImage(countrys[valueZoneId - 1].getImgFlag());
+
+        lblZone.setText(countrys[valueZoneId - 1].getNameCountry());
     }
 
     public void setHourText(String newHour) {
-        lblMinusHours.setText(newHour + ":00");
+        lblHours.setText(newHour + ":00");
     }
 
     public void setDateText(String newDate) {
-        lblMinusDate.setText(newDate);
+        lblDate.setText(newDate);
     }
 
     public ZoneId getZoneId() {

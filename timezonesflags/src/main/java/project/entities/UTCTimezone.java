@@ -10,7 +10,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import project.conversorFrontController;
+import javafx.scene.image.ImageView;
+import project.SceneControl;
 import project.utils.SliderInteractionHandler;
 
 public class UTCTimezone {
@@ -21,13 +22,17 @@ public class UTCTimezone {
     @FXML
     private Slider scrollUTC;
 
+    @FXML
+    private ImageView utcFlag;
+
     private int valueScroll;
     private OffsetDateTime dateGlobal = OffsetDateTime.parse("2023-01-01T12:00:00Z");
 
-    public UTCTimezone(Label lblDate, Slider scroll) {
+    public UTCTimezone(Label lblDate, Slider scroll, ImageView flag) {
 
         this.lblUTCHour = lblDate;
         this.scrollUTC = scroll;
+        this.utcFlag = flag;
 
         DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("HH:mm");
         scrollUTC.valueProperty().addListener(new ChangeListener<Number>() {
@@ -53,8 +58,8 @@ public class UTCTimezone {
 
     private void convertTimezoneHours() {
 
-        MinusTimezone minusTimezone = conversorFrontController.getMinusTimezone();
-        PlusTimezone plusTimezone = conversorFrontController.getPlusTimezone();
+        LocalTimezone minusTimezone = SceneControl.getMinusTimezone();
+        LocalTimezone plusTimezone = SceneControl.getPlusTimezone();
 
         ZoneId minusZoneId = minusTimezone.getZoneId();
         ZoneId plusZoneId = plusTimezone.getZoneId();
